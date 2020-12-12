@@ -9,17 +9,19 @@
 
 * Last Modified :
 
-* Created By : Kumar Karan 
+* Created By : Kumar Karan
 
-* Problem Description : 
+* Problem Description :
 
 _._._._._._._._._._._._._._._._._._._._._.*/
 
-/* Add below lines to ~/.vimrc file */
+#include<iostream>
 
-autocmd bufnewfile *.cpp so /home/karan/myWorkSpace/sample_header.txt
-autocmd bufnewfile *.cpp exe "1," . 10 . "g/File Name :.*/s//File Name : " .expand("%")
-autocmd bufnewfile *.cpp exe "1," . 10 . "g/Creation Date :.*/s//Creation Date : " .strftime("%d-%m-%Y")
-autocmd Bufwritepre,filewritepre *.cpp execute "normal ma"
-autocmd Bufwritepre,filewritepre *.cpp exe "1," . 10 . "g/Last Modified :.*/s/Last Modified :.*/Last Modified : " .strftime("%c")
-autocmd bufwritepost,filewritepost *.cpp execute "normal `a"
+using namespace std;
+
+int main()
+{
+    // Main code
+
+    return 0;
+}
