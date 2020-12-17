@@ -1,0 +1,7 @@
+// Some useful information
+
+How to generate core file in Centos 8
+
+# coredumpctl dump 10666 --output /tmp/core.pid
+
+

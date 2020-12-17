@@ -1,0 +1,27 @@
+:insert
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+
+* File Name :
+
+* Purpose :
+
+* Creation Date :
+
+* Last Modified :
+
+* Created By : Kumar Karan
+
+* Problem Description :
+
+_._._._._._._._._._._._._._._._._._._._._.*/
+
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+    // Main code
+
+    return 0;
+}
