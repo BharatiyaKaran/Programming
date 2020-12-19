@@ -1,0 +1,48 @@
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+
+* File Name : check_brackets.cpp
+
+* Purpose :
+
+* Creation Date : 19-12-2020
+
+* Last Modified : Sat Dec 19 17:08:12 2020
+
+* Created By : Kumar Karan
+
+* Problem Description :
+
+_._._._._._._._._._._._._._._._._._._._._.*/
+
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+class bracketStack
+{
+	private:
+
+	public:
+		void push(char bracket);
+		
+
+int main()
+{
+    // Main code
+	string input="{[]}()";
+
+	for(auto i: input)
+	{
+		cout<<i<<" ";
+		if(i=='(' || i=='{' || i=='[')
+			cout<<"Insert: "<<i<<endl;
+	}
+	cout<<endl;
+
+
+    return 0;
+}
+
+
+
