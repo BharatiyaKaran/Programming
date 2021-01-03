@@ -6,7 +6,7 @@
 
 * Creation Date : 12-12-2020
 
-* Last Modified : Thu Dec 17 19:57:44 2020
+* Last Modified : Fri Dec 18 14:14:55 2020
 
 * Created By :
 
@@ -23,8 +23,8 @@ using namespace std;
 
 bool canDivide(vector<unsigned long>& vecIn)
 {
-	unsigned long sum=0;
-	////printf("VecIn size =%ld\n", vecIn.size());
+	unsigned int sum=0;
+	//printf("VecIn size =%ld\n", vecIn.size());
 	for(auto i: vecIn)
 	{
 		//cout<<i<<" ";
@@ -38,7 +38,7 @@ bool canDivide(vector<unsigned long>& vecIn)
 	auto share=sum/3;
 	//cout<<"Share="<<share<<endl;
 
-	for(unsigned long j: vecIn)
+	for(unsigned int j: vecIn)
 	{
 		if(j>share)
 			return false;
@@ -47,10 +47,10 @@ bool canDivide(vector<unsigned long>& vecIn)
 	// create DP Matrix
 	vector< vector<bool> > dp;
 
-	for(unsigned long r=0; r<=vecIn.size(); ++r)
+	for(unsigned int r=0; r<=vecIn.size(); ++r)
 	{
 		vector<bool> rowVec;
-		for(unsigned long c=0; c<=share; ++c)
+		for(unsigned int c=0; c<=share; ++c)
 		{
 			if(r==0)
 			{
@@ -76,7 +76,7 @@ bool canDivide(vector<unsigned long>& vecIn)
 					else
 					{
 						// including + excluding
-						//////printf("r=%d, c=%d, including : dp[%d][%d] = %d , excluding: dp[%d][%d] =%d\n", r, c, r-1, r-c, dp[r-1][c-r]? 0:1, r-1, c, dp[r-1][c]? 0:1 );
+						//printf("r=%u, c=%u, including : dp[%u][%u] = %u , excluding: dp[%u][%u] =%u\n", r, c, r-1, r-c, dp[r-1][c-r]? 0:1, r-1, c, dp[r-1][c]? 0:1 );
 						bool val = dp[r-1][c - vecIn[r-1]] + dp[r-1][c];
 						rowVec.push_back(val);
 					}
@@ -86,16 +86,18 @@ bool canDivide(vector<unsigned long>& vecIn)
 		dp.push_back(rowVec);
 	}
 
+
 	//printf("Column: -> ");
-	/*for(unsigned long i=0; i<=share; ++i)
+	/*for(unsigned int i=0; i<=share; ++i)
 		cout<<i<<" ";
 	cout<<endl;
 	*/
 
-	for(unsigned long r=0; r<dp.size(); ++r )
+	// print the DP Array
+	for(unsigned int r=0; r<dp.size(); ++r )
 	{
 		bool pFlag=true;
-		for(unsigned long c=0; c<=share; ++c)
+		for(unsigned int c=share; c<=share; ++c)
 		{
 			if(pFlag)
 			{
@@ -106,17 +108,18 @@ bool canDivide(vector<unsigned long>& vecIn)
 				}
 				else
 				{
-					//printf("Row:%d-%d -> ",r, vecIn[r-1]);
+					//printf("Row:%u-%u -> ",r, vecIn[r-1]);
 					pFlag=false;
 				}
-				
-				
 			}
 
 			//cout<<dp[r][c]<<" ";
+			//if(dp[r][c])
+				//printf("Row: %u Value:%u DP[%u][%u]=%d\n", r, vecIn[r-1], r, c, dp[r][c]?1:0);
 		}
 		//cout<<endl;
 	}
+
 
 	// Backtrack for the solution set.
 	// Create a vector for keeping track of values used from input vector
@@ -125,8 +128,8 @@ bool canDivide(vector<unsigned long>& vecIn)
 	vector< vector<int> > solVec;
 	for(auto i=(dp.size() - 1); i>0; --i)
 	{
-		unsigned long rem = share;
-		unsigned long row = i;
+		unsigned int rem = share;
+		unsigned int row = i;
 		
 		// vector to save the values of the subsets
 		vector<int> subVec;
@@ -137,18 +140,19 @@ bool canDivide(vector<unsigned long>& vecIn)
 		// vector to save the position of the visited values
 		vector<int> visited;
 
-		unsigned long tryCount=0;
+		unsigned int tryCount=0;
+		bool usedTryCountOnce=false;
 
 		while(rem>0 && dp[row][rem] && !markUsed[row-1])
 		{
 			if(doOnce)
 			{
-				//printf("\n### While loop start for %d at position %d###\n", vecIn[row-1], row-1);
+				//printf("\n### While loop start for %u at position %u###\n", vecIn[row-1], row-1);
 				doOnce=false;
 			}
 				rem = rem - vecIn[row-1];
-				//printf("Mark %d at position %d as used and add '%d' to solution vector\n", vecIn[row-1], row-1, vecIn[row-1]);
-				//printf("Remainder=%d\n", rem);
+				//printf("Mark %u at position %u as used and add '%u' to solution vector\n", vecIn[row-1], row-1, vecIn[row-1]);
+				//printf("Remainder=%u\n", rem);
 				markUsed[row-1]=true;
 				subVec.push_back(vecIn[row-1]);
 				visited.push_back(row-1);
@@ -157,14 +161,15 @@ bool canDivide(vector<unsigned long>& vecIn)
 				while(dp[row-1][rem]!=0 && rem!=0)
 				{
 					row=row-1;
-					//printf("Row=%d, Value of Row=%d\n", row-1, vecIn[row-1]);
+					//printf("Row=%u, Value of Row=%u\n", row-1, vecIn[row-1]);
 				}
 
 				
-				if(rem!=0)
+				if(rem!=0 && !usedTryCountOnce)
 				{
 					row=row+tryCount;
-					//printf("Added try count=%d, new row=%d\n", tryCount, row);
+					usedTryCountOnce=true;
+					//printf("Added try count=%u, new row=%u\n", tryCount, row);
 				}
 
 				if(row==i)
@@ -172,7 +177,7 @@ bool canDivide(vector<unsigned long>& vecIn)
 
 				while(markUsed[row-1] && rem!=0 && row<(dp.size()-1))
 				{
-					//printf("%d Already Used so increment row->Row=%d, Value of Row=%d\n",vecIn[row-1], row-1, vecIn[row-1]);
+					//printf("%u Already Used so increment row->Row=%u, Value of Row=%u\n",vecIn[row-1], row-1, vecIn[row-1]);
 					row++;
 				}
 	
@@ -181,11 +186,12 @@ bool canDivide(vector<unsigned long>& vecIn)
 				{
 					// Solution not found in first try, increment try count
 					tryCount++;
+					usedTryCountOnce=false;
 
-					//printf("vecIn value:%d Greater than what remains: %d\n", vecIn[row-1], rem);
+					//printf("vecIn value:%u Greater than what remains: %u\n", vecIn[row-1], rem);
 					for( auto v: visited )
 					{
-						//printf("Marking Visted value: %d at position: %d back to Not used\n", vecIn[v], v);
+						//printf("Marking Visted value: %u at position: %d back to Not used\n", vecIn[v], v);
 						markUsed[v]=false;
 					}
 					//reset the while loop criteria
@@ -194,7 +200,7 @@ bool canDivide(vector<unsigned long>& vecIn)
 					markUsed[row-1]=false;
 					subVec.clear();
 					visited.clear();
-					//printf("###Reset the while loop remainder to %d, row to %d and clear the solution vector\n\n", rem, row);
+					//printf("###Reset the while loop remainder to %u, row to %u and clear the solution vector\n\n", rem, row);
 					continue;
 				}
 		}
@@ -203,26 +209,26 @@ bool canDivide(vector<unsigned long>& vecIn)
 	}
 
 		/*cout << "Solution vector size = " << solVec.size() << endl;
-		for(unsigned long r=0; r<solVec.size(); ++r)
+		for(unsigned int r=0; r<solVec.size(); ++r)
 		{
-			for (unsigned long c=0; c<solVec[r].size(); ++c)
+			for (unsigned int c=0; c<solVec[r].size(); ++c)
 			{
 				cout<<solVec[r][c]<<" ";
 			}
 			cout<<endl;
 		}	
-	*/
-
-		for(unsigned long i=0; i< markUsed.size(); ++i )
+	
+*/
+		for(unsigned int i=0; i< markUsed.size(); ++i )
 		{
 			if (!markUsed[i])
 			{
-				//printf("Not used %d\n", vecIn[i]);
+				//printf("Not used %u\n", vecIn[i]);
 				return false;
 			}
 			else
 			{
-				//printf("Used: %d\n",vecIn[i]);
+				//printf("Used: %u\n",vecIn[i]);
 			}
 		}
 
@@ -237,26 +243,26 @@ int main()
 	srand(time(0));
 	auto num=0;
 	cin>>num;
-	//num = rand()%21;
+	//num = (rand()%20)+1;
 
 	vector<unsigned long> vecIn;
 	for(auto i=0; i<num; ++i)
 	{
 		auto val=0;
 		cin>>val;
-		//val = rand()%11;
+		//val = (rand()%30)+1;
 		vecIn.push_back(val);
 	}
 
-	/*for(auto i: vecIn)
+	//printf("Number of Input entries=%u\n", vecIn.size());
+	// Display input entries
+/*	for(auto i: vecIn)
 		cout<<i<<" ";
 	cout<<endl;
-	*/
-
-
+*/
 	sort(vecIn.begin(), vecIn.end());
 	printf("%d\n", canDivide(vecIn)? 1:0);
-	//cout<<"###########\n";
+	//cout<<"###########\n\n";
 	//sleep(1);
 	//}
     return 0;
