@@ -666,6 +666,7 @@ namespace Catch {
 #include <iosfwd>
 #include <cstddef>
 #include <ostream>
+#include "../../IntPair2.h"
 
 namespace Catch {
 
@@ -674,6 +675,8 @@ namespace Catch {
     std::ostream& clog();
 
     class StringRef;
+    // Bring in operator<< from global namespace into Catch namespace
+    using ::operator<<;
 
     struct IStream {
         virtual ~IStream();
@@ -4758,7 +4761,8 @@ namespace Catch {
 
 #ifdef CATCH_PLATFORM_MAC
 
-    #define CATCH_TRAP() __asm__("int $3\n" : : ) /* NOLINT */
+    //#define CATCH_TRAP() __asm__("int $3\n" : : ) /* NOLINT */
+	#define CATCH_TRAP()  __asm__(".inst 0xd4200000")
 
 #elif defined(CATCH_PLATFORM_LINUX)
     // If we can use inline assembler, do it because this allows us to break
